@@ -13,7 +13,7 @@ export default function IconRender(props) {
     <div className={styles["icon-container"]}>
       {logData.map((cast, key) => {
         const skillId = cast.skillId;
-        if (time == 0 || time >= cast.time) {
+        if ((cast.amount > 0 && time == 0) || time >= cast.time) {
           try {
             const icon = parsedSkills[skillId].icon;
             if (prevSkillId === skillId) {
