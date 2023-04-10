@@ -1,4 +1,4 @@
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Login.module.css";
 import { useState } from "react";
 import { parser_signup } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
@@ -51,22 +51,25 @@ export default function CreateAccount() {
           type="text"
           placeholder="Email"
           value={email}
+          className={styles.input}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="Password"
+          className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <input
           type="password"
           placeholder="Confirm Password"
+          className={styles.input}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         {error && <p>{error}</p>}
-        <button type="submit" onClick={handleSubmit}>
+        <button type="submit" onClick={handleSubmit} className={styles.button}>
           Sign up
         </button>
       </main>
