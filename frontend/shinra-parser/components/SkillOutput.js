@@ -8,24 +8,31 @@ export default function IconRender(props) {
   let count = 1;
   let prevIcon = null;
   let exclude = true;
-  console.log(time);
 
   return (
     <div className={styles["icon-container"]}>
       {logData.map((cast, key) => {
         const skillId = cast.skillId;
-        const nextCast = logData[key + 1]
-        function result(nextCast, skillId){
+        const nextCast = logData[key + 1];
+        function result(nextCast, skillId) {
           // compare skills by baseId
-          let nextSkillBaseId = [nextCast.skillId.toString().slice(0, 3), nextCast.skillId.toString().slice(3)];
-          let currentSkillBaseId = [skillId.toString().slice(0, 3), skillId.toString().slice(3)]
+          let nextSkillBaseId = [
+            nextCast.skillId.toString().slice(0, 3),
+            nextCast.skillId.toString().slice(3),
+          ];
+          let currentSkillBaseId = [
+            skillId.toString().slice(0, 3),
+            skillId.toString().slice(3),
+          ];
           return currentSkillBaseId[0] != nextSkillBaseId[0];
         }
-        if(nextCast && cast.amount == 0){
-          var output = result(nextCast, skillId)
-          console.log(output)
-        }  
-        if (cast.amount > 0 && (time == 0 || time >= cast.time) || output && (time == 0 || time >= cast.time)) {
+        if (nextCast && cast.amount == 0) {
+          var output = result(nextCast, skillId);
+        }
+        if (
+          (cast.amount > 0 && (time == 0 || time >= cast.time)) ||
+          (output && (time == 0 || time >= cast.time))
+        ) {
           try {
             const icon = parsedSkills[skillId].icon;
             if (prevSkillId === skillId) {
@@ -43,7 +50,7 @@ export default function IconRender(props) {
                 count = 1;
                 prevIcon = icon;
                 prevSkillId = skillId;
-                exclude = true
+                exclude = true;
                 return iconToRender;
               } else {
                 prevIcon = icon;
@@ -51,6 +58,7 @@ export default function IconRender(props) {
             }
             prevSkillId = skillId;
           } catch (error) {
+            console.log("Error: " + skillId);
             console.log(error);
           }
         }

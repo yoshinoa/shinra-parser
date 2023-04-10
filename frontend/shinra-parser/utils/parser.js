@@ -1,7 +1,6 @@
 import config from "@/config.json";
 
 export default async function parse_data(to_parse) {
-  console.log(to_parse);
   if (to_parse == null) {
     return;
   }
@@ -22,6 +21,20 @@ export default async function parse_data(to_parse) {
       };
     }
   });
+  response = await fetch(config.tsv_override);
+  responsetext.split(/\r?\n/).forEach(function (line) {
+    let fields = line.split("\t");
+    if (fields[3] == playerClass && unique_skill_ids.has(parseInt(fields[0]))) {
+      let skill_id = parseInt(fields[0]);
+      let skill_name = fields[4];
+      let skill_icon = fields[7];
+      skill_map[skill_id] = {
+        name: skill_name,
+        icon: config.icon_base + skill_icon + config.icon_suffix,
+      };
+    }
+  });
+
   return skill_map;
 }
 // read the tab-separated values file into a dictionary with skillId as the key and skill name as the value
