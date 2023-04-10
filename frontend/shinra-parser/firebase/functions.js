@@ -5,7 +5,7 @@ import { connectFunctionsEmulator } from "firebase/functions";
 const functions = getFunctions(app);
 console.log(functions);
 // The Firebase Admin SDK to access the Firebase Realtime Database
-connectFunctionsEmulator(functions, "localhost", 5001);
+// connectFunctionsEmulator(functions, "localhost", 5001);
 //
 
 export function upload_log(logContents, username) {
