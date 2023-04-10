@@ -26,6 +26,10 @@
   color: #fff;
 }
 
+.title:hover {
+  cursor: pointer;
+}
+
 .description {
   margin: 0;
   margin-bottom: 1rem;

@@ -53,7 +53,14 @@ export function JsonLog() {
   return (
     <div className={styles["main"]}>
       <div className={styles["header"]}>
-        <h1 className={styles["title"]}>Shinra Parser</h1>
+        <h1
+          className={styles["title"]}
+          onClick={() => {
+            router.push("/home");
+          }}
+        >
+          Shinra Parser
+        </h1>
         <div className={styles["timediv"]}>
           <p className={styles["description"]}>Time</p>
           <input
