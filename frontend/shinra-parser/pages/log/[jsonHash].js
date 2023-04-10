@@ -87,4 +87,4 @@ export function JsonLog() {
   );
 }
 
-export default withAuth(JsonLog);
+export default JsonLog;
