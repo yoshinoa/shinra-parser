@@ -4,10 +4,9 @@ const { v4: uuidv4 } = require("uuid");
 const SparkMD5 = require("spark-md5");
 const { validate_log } = require("./file_operations/validate_log");
 const { filter_log } = require("./file_operations/filter_log");
+const hash = require("md5");
 
 admin.initializeApp();
-
-const cors = require("cors")({ origin: true });
 
 exports.uploadLog = functions.https.onCall(async (data, context) => {
   const file = data.file;
@@ -35,7 +34,8 @@ exports.uploadLog = functions.https.onCall(async (data, context) => {
   const stringifiedLog = JSON.stringify(filteredLog);
 
   // Compute the MD5 hash of the filtered log file
-  const md5 = SparkMD5.ArrayBuffer.hash(stringifiedLog);
+  const md5 = hash(stringifiedLog);
+  console.log("THIS IS MD5", md5);
 
   // Create a Firebase Storage reference
   const storageRef = admin.storage().bucket().file(`log/${md5}.json`);
@@ -44,8 +44,7 @@ exports.uploadLog = functions.https.onCall(async (data, context) => {
     if (exists[0]) {
       return { message: "Log already exists", md5: md5 };
     } else {
-      console.log(JSON.stringify(filteredLog));
-      storageRef.save(filteredLog);
+      await storageRef.save(stringifiedLog);
       return { message: "Log uploaded", md5: md5 };
     }
   });

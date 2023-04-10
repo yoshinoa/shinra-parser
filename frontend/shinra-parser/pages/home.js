@@ -28,8 +28,11 @@ export function Upload() {
       const logContents = e.target.result;
 
       upload_log(logContents, playerName)
-        .then((res) => {
-          router.push("/log/" + res.data.md5);
+        .then(async (res) => {
+          const myTimeout = setTimeout(
+            router.push("/log/" + res.data.md5),
+            5000
+          );
         })
         .catch((err) => {
           setLogError(err.message);
