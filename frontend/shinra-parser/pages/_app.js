@@ -6,6 +6,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 import { useRouter } from "next/router";
 import { auth } from "@/firebase/firebase";
+import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,6 +14,7 @@ export default function App({ Component, pageProps }) {
   return (
     <main className={inter.className}>
       <Component {...pageProps} />
+      <Footer />
     </main>
   );
 }
