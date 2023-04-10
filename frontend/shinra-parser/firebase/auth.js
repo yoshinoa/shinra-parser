@@ -3,9 +3,13 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  browserLocalPersistence,
+  setPersistence,
 } from "firebase/auth";
 import { auth } from "./firebase";
 import { useRouter } from "next/router";
+
+setPersistence(auth, browserLocalPersistence);
 
 export function parser_signup(email, password) {
   return createUserWithEmailAndPassword(auth, email, password);
@@ -23,10 +27,8 @@ export function setupAuthStateListener() {
   const router = useRouter();
   auth.onAuthStateChanged((user) => {
     if (user) {
-      console.log("ran");
       router.push("/home");
     } else {
-      console.log("ran");
       router.push("/login");
     }
   });

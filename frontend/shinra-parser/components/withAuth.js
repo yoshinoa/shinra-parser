@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { auth } from "@/firebase/firebase";
+
 const withAuth = (Component) => {
   const AuthenticatedComponent = (props) => {
     const router = useRouter();
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-      if (!auth.currentUser) {
-        router.push("/login");
-      } else {
-        setUser(auth.currentUser);
-      }
+      const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+        if (currentUser) {
+          setUser(currentUser);
+        } else {
+          router.push("/login");
+        }
+      });
+
+      return () => unsubscribe();
     }, []);
 
     return user ? <Component {...props} /> : null;
