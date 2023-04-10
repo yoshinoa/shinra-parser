@@ -29,7 +29,6 @@ export function Upload() {
 
       upload_log(logContents, playerName)
         .then((res) => {
-          console.log(res);
           router.push("/log/" + res.data.md5);
         })
         .catch((err) => {
