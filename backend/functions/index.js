@@ -40,13 +40,22 @@ exports.uploadLog = functions.https.onCall(async (data, context) => {
   // Create a Firebase Storage reference
   const storageRef = admin.storage().bucket().file(`log/${md5}.json`);
 
-  storageRef.exists().then(async (exists) => {
+  return storageRef.exists().then(async (exists) => {
     if (exists[0]) {
+      console.log("THIS IS EXISTS", exists);
       return { message: "Log already exists", md5: md5 };
     } else {
-      await storageRef.save(stringifiedLog);
-      return { message: "Log uploaded", md5: md5 };
+      console.log("are we even getting here");
+      return storageRef
+        .save(stringifiedLog)
+        .then((data) => {
+          console.log("uploaded");
+          console.log("THIS IS DATA", data);
+          return { message: "Log uploaded", md5: md5 };
+        })
+        .catch((err) => {
+          console.log("THIS IS ERROR", err);
+        });
     }
   });
-  return { message: "Log uploaded", md5: md5 };
 });

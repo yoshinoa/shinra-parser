@@ -10,6 +10,9 @@ export function JsonLog() {
   const router = useRouter();
   const mgicon_prefix = "https://storage.googleapis.com/mg-res/icons";
   const [logData, setLogData] = useState(null);
+  const [playerName, setPlayerName] = useState(null);
+  const [dungeonName, setDungeonName] = useState(null);
+  const [bossId, setBossId] = useState(null);
   const [parsedSkills, setParsedSkills] = useState(null);
   const [time, setTime] = useState(0);
   const { jsonHash } = router.query;
@@ -36,6 +39,9 @@ export function JsonLog() {
       setParsedSkills(parsedData);
     }
     if (logData) {
+      setPlayerName(logData.players[0].playerName);
+      setDungeonName(logData.areaId);
+      setBossId(logData.bossId);
       parse_async();
     }
   }, [logData]);
@@ -60,6 +66,11 @@ export function JsonLog() {
           />
         </div>
         <p className={styles["description"]}>Skill Usage</p>
+      </div>
+      <div>
+        <p className={styles["playername"]}>{playerName}</p>
+        <p>Dungeon Name: {dungeonName}</p>
+        <p>BossId: {bossId}</p>
       </div>
       <div>
         {parsedSkills ? (

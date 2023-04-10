@@ -36,5 +36,8 @@ function pre_process(json_file) {
   for (let skill of skillLog) {
     unique_skill_ids.add(skill.skillId);
   }
-  return { unique_skill_ids: unique_skill_ids, playerClass: playerClass };
+  return {
+    unique_skill_ids: unique_skill_ids,
+    playerClass: playerClass,
+  };
 }
