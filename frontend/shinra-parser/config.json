@@ -1,0 +1,7 @@
+{
+  "mgprefix": "https://storage.googleapis.com/mg-res/icons/",
+  "tsv_url": "https://firebasestorage.googleapis.com/v0/b/shinra-parser.appspot.com/o/assets%2Fskills-EU-EN.tsv?alt=media",
+  "tsv_override": "https://firebasestorage.googleapis.com/v0/b/shinra-parser.appspot.com/o/assets%2Fskills-override-EU-EN.tsv?alt=media",
+  "icon_base": "https://firebasestorage.googleapis.com/v0/b/shinra-parser.appspot.com/o/assets%2F",
+  "icon_suffix": ".png?alt=media"
+}

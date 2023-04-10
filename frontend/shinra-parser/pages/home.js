@@ -1,16 +1,20 @@
-import { useState } from "react";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import validate_log from "@/validators/validate_log";
-import filter_log from "@/filters/filter_log";
-import { db } from "@/firebase/firebase";
-import SparkMD5 from "spark-md5";
+import { useState, useRef } from "react";
+import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
+import { upload_log } from "@/firebase/functions";
+import LogoutButton from "@/components/Logout";
+import withAuth from "@/components/withAuth";
 
-export default function Upload() {
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+export function Upload() {
   const [file, setFile] = useState(null);
   const [playerName, setPlayerName] = useState("");
   const [logError, setLogError] = useState(null);
   const [fileExists, setFileExists] = useState(false);
+  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef(null);
   const router = useRouter();
 
   const handleFileUpload = async (e) => {
@@ -23,57 +27,59 @@ export default function Upload() {
     fileReader.onload = async (e) => {
       const logContents = e.target.result;
 
-      // Validate the log
-      const isValidLog = validate_log(logContents, playerName);
-      if (!isValidLog) {
-        setLogError("Invalid log file.");
-        return;
-      }
-
-      const filteredLog = await filter_log(file, playerName);
-
-      const blob = new Blob([JSON.stringify(filteredLog)], {
-        type: "application/json",
-      });
-
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const md5 = SparkMD5.ArrayBuffer.hash(e.target.result);
-        console.log(md5); // log the MD5 hash
-        // Create a Firebase Storage reference
-        const storageRef = ref(getStorage(), "uploads/" + md5 + ".json");
-
-        // Upload the file to Firebase Storage
-        try {
-          await uploadBytes(storageRef, blob);
-        } catch (error) {
-          router.push("/log/" + md5);
-          return;
-        }
-
-        router.push("/log/" + md5);
-
-        // Reset the file input
-        setFile(null);
-      };
-      reader.readAsArrayBuffer(blob);
+      upload_log(logContents, playerName)
+        .then((res) => {
+          router.push("/log/" + res.data.md5);
+        })
+        .catch((err) => {
+          setLogError(err.message);
+        });
     };
 
     fileReader.readAsText(file);
   };
 
+  const handleChooseFileClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
-    <div>
-      <form onSubmit={handleFileUpload}>
+    <div className={styles["upload-container"]}>
+      <div className={styles["top-right"]}>
+        <LogoutButton />
+      </div>
+
+      <form className={styles["upload-form"]} onSubmit={handleFileUpload}>
         <input
+          className={styles["upload-input"]}
           type="text"
           placeholder="Player Name"
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
         />
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <button type="submit">Upload</button>
+        <label htmlFor="file" className={styles["upload-input-label"]}>
+          <FontAwesomeIcon icon={faUpload} /> Choose file
+          <input
+            type="file"
+            id="file"
+            className={styles["upload-input-hidden"]}
+            ref={fileInputRef}
+            onChange={(e) => {
+              setFile(e.target.files[0]);
+              setFileName(e.target.files[0].name);
+            }}
+          />
+        </label>
+        <span className={styles["upload-selected-file"]}>{fileName}</span>
+        {logError && (
+          <p className={styles["upload-error"]}>{logError.toString()}</p>
+        )}
+        <button className={styles["upload-button"]} type="submit">
+          Upload
+        </button>
       </form>
     </div>
   );
 }
+
+export default withAuth(Upload);

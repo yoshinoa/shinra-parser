@@ -1,0 +1,28 @@
+.icon-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.icon {
+  width: 50px; /* adjust the width as needed */
+  height: 50px; /* adjust the height as needed */
+  margin: 5px; /* add some margin between the icons */
+}
+
+.skill-icon-container {
+  position: relative;
+}
+
+.skill-icon-count {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 3px 5px;
+  border-radius: 50%;
+  background-color: blue;
+}

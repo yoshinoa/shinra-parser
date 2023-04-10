@@ -1,11 +1,13 @@
-export default function validate_log(logContents, playerName) {
+function validate_log(logContents, playerName) {
   // Parse the JSON data
   let logData;
-  console.log(logContents);
   try {
     logData = JSON.parse(logContents);
   } catch (error) {
-    console.error("Failed to parse log file:", error);
+    return {
+      message: "Log file is not valid JSON",
+      status: false,
+    };
     return false;
   }
 
@@ -23,8 +25,10 @@ export default function validate_log(logContents, playerName) {
 
   for (const prop of requiredProperties) {
     if (!logData.hasOwnProperty(prop)) {
-      console.log(`Log is missing required property '${prop}'`);
-      return false;
+      return {
+        message: `Log file is missing a required property`,
+        status: false,
+      };
     }
   }
 
@@ -32,9 +36,16 @@ export default function validate_log(logContents, playerName) {
     (player) => player.playerName === playerName
   );
   if (!playerData) {
-    console.log(`Log does not contain data for player '${playerName}'`);
-    return false;
+    return {
+      message: `Log does not contain data for player '${playerName}'`,
+      status: false,
+    };
   }
 
-  return true;
+  return {
+    message: "Log file is valid",
+    status: true,
+  };
 }
+
+exports.validate_log = validate_log;

@@ -1,4 +1,4 @@
-import styles from "@/styles/Home.module.css";
+import styles from "@/styles/Login.module.css";
 import { useState } from "react";
 import { parser_login } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
@@ -41,20 +41,30 @@ export default function Login() {
         <h1 className={styles.title}>Welcome to Shinra Parser!</h1>
         <p className={styles.description}>Sign in to get started</p>
         <input
+          className={styles.input}
           type="text"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
+          className={styles.input}
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {error && <p>{error}</p>}
-        <button type="submit" onClick={handleSubmit}>
+        {error && <p className={styles.error}>{error}</p>}
+        <button className={styles.button} type="submit" onClick={handleSubmit}>
           Sign in
+        </button>
+        <button
+          className={styles.button}
+          onClick={() => {
+            router.push("/create_account");
+          }}
+        >
+          Create Account
         </button>
       </main>
     </div>
